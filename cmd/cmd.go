@@ -31,11 +31,19 @@ func Run() {
 		Use: "db",
 	}
 
+	mgrtCmd := &cobra.Command{
+		Use: "migrate",
+		Run: func(cmd *cobra.Command, args []string) {
+			datebase.PgMigrate()
+		},
+	}
+
+	datebase.PgConnect()
 	rootCmd.AddCommand(srvCmd)
 	rootCmd.AddCommand(dbCmd)
 	dbCmd.AddCommand(createCmd)
+	dbCmd.AddCommand(mgrtCmd)
 
-	datebase.PgConnect()
 	defer datebase.PgClose()
 
 	rootCmd.Execute()
