@@ -7,9 +7,9 @@ import (
 )
 
 func RunServer() {
-	datebase.Connect()
-	datebase.CreateTables()
-	defer datebase.Close()
+	datebase.MysqlConnect()
+	// datebase.CreateTables()
+	defer datebase.MysqlClose()
 
 	r := router.New()
 	// Listen and Server in 0.0.0.0:8080
