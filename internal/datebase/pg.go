@@ -35,7 +35,7 @@ func PgConnect() {
 	log.Println("Successfully connect to db")
 }
 
-func CreateTables() {
+func PgCreateTables() {
 	// 创建 User 表
 	_, err := DB.Exec(`CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
