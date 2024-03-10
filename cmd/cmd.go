@@ -8,7 +8,8 @@ import (
 
 func RunServer() {
 	datebase.MysqlConnect()
-	// datebase.CreateTables()
+	datebase.MysqlCreateTables()
+
 	defer datebase.MysqlClose()
 
 	r := router.New()

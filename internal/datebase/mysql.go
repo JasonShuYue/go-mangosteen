@@ -35,6 +35,24 @@ func MysqlConnect() {
 	log.Println("Successfully connect Mysql")
 }
 
+func MysqlCreateTables() {
+	createTableSQL := `CREATE TABLE IF NOT EXISTS users(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		email VARCHAR(50) NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	);`
+
+	_, err := DB.Exec(createTableSQL)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("Successfully create users table")
+
+}
+
 func MysqlClose() {
 	DB.Close()
 	log.Println("database close successfully")
