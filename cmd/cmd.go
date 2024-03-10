@@ -20,18 +20,23 @@ func Run() {
 		},
 	}
 
+	createCmd := &cobra.Command{
+		Use: "create",
+		Run: func(cmd *cobra.Command, args []string) {
+			datebase.MysqlCreateTables()
+		},
+	}
+
 	dbCmd := &cobra.Command{
 		Use: "db",
-		Run: func(cmd *cobra.Command, args []string) {
-			datebase.PgConnect()
-			datebase.PgCreateTables()
-
-			defer datebase.PgClose()
-		},
 	}
 
 	rootCmd.AddCommand(srvCmd)
 	rootCmd.AddCommand(dbCmd)
+	dbCmd.AddCommand(createCmd)
+
+	datebase.PgConnect()
+	defer datebase.PgClose()
 
 	rootCmd.Execute()
 
