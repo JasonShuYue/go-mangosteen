@@ -36,7 +36,7 @@ func PgConnect() {
 }
 
 func PgMigrate() {
-	// 给 User 添加手机字段
+	// 给 User 表添加手机字段
 	_, err := DB.Exec(`ALTER TABLE users ADD COLUMN phone VARCHAR(50)`)
 
 	if err != nil {
@@ -45,6 +45,7 @@ func PgMigrate() {
 
 	log.Println("successfully add phone column to users table")
 
+	// 给 User 表新增 adress 字段
 	_, err = DB.Exec(`ALTER TABLE users ADD COLUMN address VARCHAR(200)`)
 
 	if err != nil {
@@ -60,7 +61,6 @@ func PgMigrate() {
 		happend_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
 	)`)
 
 }
