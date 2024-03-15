@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"go-mangosteen/internal/datebase"
+	"go-mangosteen/internal/database"
 	"go-mangosteen/internal/router"
 	"log"
 
@@ -23,7 +23,7 @@ func Run() {
 	createCmd := &cobra.Command{
 		Use: "create",
 		Run: func(cmd *cobra.Command, args []string) {
-			datebase.MysqlCreateTables()
+			database.MysqlCreateTables()
 		},
 	}
 
@@ -34,17 +34,22 @@ func Run() {
 	mgrtCmd := &cobra.Command{
 		Use: "migrate",
 		Run: func(cmd *cobra.Command, args []string) {
-			datebase.PgMigrate()
+			database.PgMigrate()
 		},
 	}
 
-	datebase.PgConnect()
-	rootCmd.AddCommand(srvCmd)
-	rootCmd.AddCommand(dbCmd)
-	dbCmd.AddCommand(createCmd)
-	dbCmd.AddCommand(mgrtCmd)
+	crudCmd := &cobra.Command{
+		Use: "crud",
+		Run: func(cmd *cobra.Command, args []string) {
+			database.PgCrud()
+		},
+	}
 
-	defer datebase.PgClose()
+	database.PgConnect()
+	rootCmd.AddCommand(srvCmd, dbCmd)
+	dbCmd.AddCommand(createCmd, mgrtCmd, crudCmd)
+
+	defer database.PgClose()
 
 	rootCmd.Execute()
 

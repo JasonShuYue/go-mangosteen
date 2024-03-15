@@ -1,4 +1,4 @@
-package datebase
+package database
 
 import (
 	"database/sql"
@@ -84,4 +84,42 @@ func PgCreateTables() {
 func PgClose() {
 	DB.Close()
 	log.Println("Successfully close DB")
+}
+
+func PgCrud() {
+	// 创建一个 User
+	result, err := DB.Query("INSERT INTO users (email) values ('1@qq.com')")
+
+	if err != nil {
+		log.Println(err)
+	} else {
+		if result.Next() {
+			var email string
+			result.Scan(&email)
+			log.Println(result)
+		}
+
+		log.Println("Successfully create a user")
+	}
+
+	_, err = DB.Exec(`UPDATE users SET phone = 1123456789 where email = '1@qq.com'`)
+
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Printf("Successfully update a user")
+	}
+
+	result, err = DB.Query(`SELECT phone FROM users where email = '1@qq.com'`)
+
+	if err != nil {
+		log.Println(err)
+	} else {
+		for result.Next() {
+			var phone string
+			result.Scan(&phone)
+			log.Println("phone:", phone)
+		}
+		log.Println("Successfully read users")
+	}
 }
