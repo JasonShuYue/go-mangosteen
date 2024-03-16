@@ -32,7 +32,6 @@ func MysqlConnect() {
 		log.Fatalln("db.Ping error:", err)
 	}
 
-	log.Println("Successfully connect Mysql")
 }
 
 func MysqlCreateTables() {
@@ -49,11 +48,8 @@ func MysqlCreateTables() {
 		log.Fatalln(err)
 	}
 
-	log.Println("Successfully create users table")
-
 }
 
 func MysqlClose() {
 	DB.Close()
-	log.Println("database close successfully")
 }

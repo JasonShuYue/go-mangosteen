@@ -32,7 +32,6 @@ func PgConnect() {
 		log.Fatalln("db.Ping error:", err)
 	}
 
-	log.Println("Successfully connect to db")
 }
 
 func PgMigrate() {
@@ -43,16 +42,12 @@ func PgMigrate() {
 		log.Println(err)
 	}
 
-	log.Println("successfully add phone column to users table")
-
 	// 给 User 表新增 adress 字段
 	_, err = DB.Exec(`ALTER TABLE users ADD COLUMN address VARCHAR(200)`)
 
 	if err != nil {
 		log.Println(err)
 	}
-
-	log.Println("successfully add address column to users table")
 
 	// 新增 Items 表，字段为 id, amount, happened_at, created_at, updated_at
 	DB.Exec(`CREATE TABLE IF NOT EXISTS items(
@@ -68,8 +63,6 @@ func PgMigrate() {
 
 	if err != nil {
 		log.Println(err)
-	} else {
-		log.Println(`Successfully add unique index to email column`)
 	}
 }
 
@@ -86,12 +79,10 @@ func PgCreateTables() {
 		log.Panicln("DB.Exec err:", err)
 	}
 
-	log.Println("Successfully create user table")
 }
 
 func PgClose() {
 	DB.Close()
-	log.Println("Successfully close DB")
 }
 
 func PgCrud() {
@@ -114,15 +105,12 @@ func PgCrud() {
 			log.Println(result)
 		}
 
-		log.Println("Successfully create a user")
 	}
 
 	_, err = DB.Exec(`UPDATE users SET phone = 1123456789 where email = '1@qq.com'`)
 
 	if err != nil {
 		log.Println(err)
-	} else {
-		log.Printf("Successfully update a user")
 	}
 
 	result, err = DB.Query(`SELECT phone FROM users where email = '1@qq.com'`)
@@ -135,6 +123,5 @@ func PgCrud() {
 			result.Scan(&phone)
 			log.Println("phone:", phone)
 		}
-		log.Println("Successfully read users")
 	}
 }
