@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	_ "github.com/lib/pq"
+	"github.com/lib/pq"
 )
 
 const (
@@ -63,6 +63,14 @@ func PgMigrate() {
 		updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	)`)
 
+	// 给 users 的 email 属性添加唯一性索引
+	_, err = DB.Exec(`CREATE UNIQUE INDEX users_email_index ON users (email)`)
+
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println(`Successfully add unique index to email column`)
+	}
 }
 
 func PgCreateTables() {
@@ -91,7 +99,14 @@ func PgCrud() {
 	result, err := DB.Query("INSERT INTO users (email) values ('1@qq.com')")
 
 	if err != nil {
-		log.Println(err)
+		switch x := err.(type) {
+		case *pq.Error:
+			pqError := err.(*pq.Error)
+			log.Println(pqError.Code.Name())
+			log.Println(pqError.Message)
+		default:
+			log.Println(x)
+		}
 	} else {
 		if result.Next() {
 			var email string
