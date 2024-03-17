@@ -6,13 +6,13 @@ import (
 )
 
 func BenchmarkCrud(b *testing.B) {
-	database.PgConnect()
-	database.PgCreateTables()
-	database.PgMigrate()
+	database.Connect()
+	database.CreateTables()
+	database.Migrate()
 
-	defer database.MysqlClose()
+	defer database.Close()
 
 	for i := 0; i < b.N; i++ {
-		database.PgCrud()
+		database.Crud()
 	}
 }

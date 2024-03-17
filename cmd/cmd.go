@@ -23,7 +23,14 @@ func Run() {
 	createCmd := &cobra.Command{
 		Use: "create",
 		Run: func(cmd *cobra.Command, args []string) {
-			database.MysqlCreateTables()
+			database.CreateTables()
+		},
+	}
+
+	deleteCmd := &cobra.Command{
+		Use: "delete",
+		Run: func(cmd *cobra.Command, args []string) {
+			database.DeleteTable()
 		},
 	}
 
@@ -34,22 +41,22 @@ func Run() {
 	mgrtCmd := &cobra.Command{
 		Use: "migrate",
 		Run: func(cmd *cobra.Command, args []string) {
-			database.PgMigrate()
+			database.Migrate()
 		},
 	}
 
 	crudCmd := &cobra.Command{
 		Use: "crud",
 		Run: func(cmd *cobra.Command, args []string) {
-			database.PgCrud()
+			database.Crud()
 		},
 	}
 
-	database.PgConnect()
-	rootCmd.AddCommand(srvCmd, dbCmd)
-	dbCmd.AddCommand(createCmd, mgrtCmd, crudCmd)
+	database.Connect()
+	defer database.Close()
 
-	defer database.PgClose()
+	rootCmd.AddCommand(srvCmd, dbCmd)
+	dbCmd.AddCommand(createCmd, mgrtCmd, crudCmd, deleteCmd)
 
 	rootCmd.Execute()
 
